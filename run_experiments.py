@@ -124,36 +124,69 @@ def main(algorithms, iterations, array_sizes, file_name, is_random, noise_per=0)
             summary_results[name]['means'].append(statistics.mean(runtimes))
             summary_results[name]['stds'].append(statistics.stdev(runtimes))
 
-            print(f"Finished {name} for size {arr_size}")
-
     plot_results(array_sizes, summary_results, file_name, noise_per)
+
+def parse_algo_to_exec(ids, algo_map,algorithms):
+    updated_dict = {}
+    for id in ids:
+        if id in algo_map.keys():
+            updated_dict[algo_map[id]] = algorithms[algo_map[id]]
+    return updated_dict
+
 
 
 if __name__ == '__main__':
     algorithms = {
-        'Bubble': bubble_sort,
-        'Insertion': insertion_sort,
-        'Merge': merge_sort
+        'bubble_sort': bubble_sort,
+        'insertion_sort': insertion_sort,
+        'merge_sort': merge_sort
     }
-
+    # mapping of sort kind
+    algo_map = {
+        '1': 'bubble_sort',
+        '3': 'insertion_sort',
+        '4': 'merge_sort'
+    }
     array_sizes = [100, 500, 1000, 2500, 5000]
     iterations = 5  # to get correct average will repeat every size 5 times
-
-    main(algorithms, iterations, array_sizes, 'result1,png', True)  # part B
-    main(algorithms, iterations, array_sizes, 'result2.png', False, 5)  # part C
 
     # part D:
     parser = argparse.ArgumentParser(description="Run sorting experiments")
 
-    parser.add_argument("-a", "--algorithms", type=str, help="Algorithm IDs (e.g., 125)")
+    parser.add_argument("-a", "--algorithms", type=str,nargs='+', help="Algorithm IDs (e.g., 125)")
     parser.add_argument("-s", "--sizes", type=int, nargs='+', help="Array sizes")
     parser.add_argument("-e", "--experiment", type=int, choices=[1, 2], help="1: 5% noise, 2: 20% noise")
     parser.add_argument("-r", "--repetitions", type=int, default=1, help="Number of repetitions")
 
     args = parser.parse_args()
+    # insert values to variables
+    array_sizes_arg = args.sizes if args.sizes else [100, 500, 1000]  # default values if none was given
+    reps = args.repetitions if args.repetitions else 1 # number or repetitions
+    if args.experiment == 1:
+        noise = 5
+    elif args.experiment == 2:
+        noise = 20
+    else:
+        noise = 0
+    is_random = True if noise == 0 else False
 
-    # כאן את מחברת את הארגומנטים ללולאות הניסוי שכתבת
+
+
+    #  running exp
     if args.algorithms:
-        # דוגמה: אם המשתמש הזין "125", נריץ את Bubble(1), Insertion(3) ו-Merge(4) [cite: 71-76]
-        # שימי לב להתאמה בין ה-ID לאלגוריתם לפי הרשימה במטלה [cite: 71]
-        pass
+        for k in args.algorithms:
+            if k not in algo_map.keys():
+                print("algorithm isn't supported")
+                exit()
+        algo_parsed = parse_algo_to_exec(args.algorithms,algo_map,algorithms)
+        main(algo_parsed,reps,array_sizes_arg,'result_cmd.png',is_random,noise)
+    else:
+        print("no argument given- running B,C task")
+        main(algorithms, iterations, array_sizes, 'result1.png', True)  # part B
+        main(algorithms, iterations, array_sizes, 'result2.png', False, 5)  # part C
+
+
+
+
+
+
