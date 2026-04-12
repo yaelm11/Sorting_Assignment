@@ -12,6 +12,6 @@ The selected algorithms: Bubble Sort, Insertion Sort, Merge Sort.
 
 
 figure 2:
-
+![Sorting Results](result2.png)
 
 The results for the nearly sorted arrays show a major change in performance, especially for Insertion Sort. Since the array is mostly sorted, Insertion Sort only needs to make a few minor adjustments, allowing it to run almost as fast as Merge Sort. In contrast, Bubble Sort still performs poorly because it continues to scan through the entire array multiple times, even when most elements are already in place. Meanwhile, Merge Sort shows consistent performance regardless of the initial order, as its "divide and conquer" approach always performs the same amount of work. This experiment proves that while Merge Sort is generally the most reliable, Insertion Sort becomes highly efficient when dealing with data that is already close to being sorted.
