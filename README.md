@@ -4,6 +4,8 @@ Student Names: Adi Naor and Yael Malki
 
 The selected algorithms: Bubble Sort, Insertion Sort, Merge Sort.
 
+Due to the O(n^2) time complexity of Bubble Sort and Insertion Sort, running them on $10^6$ elements would result in excessive runtime. Therefore, we chose to run these algorithms only on smaller input sizes where they finish in a reasonable time, allowing for a shared range comparison with the faster algorithms.
+
  figure 1: 
 ![Sorting Results](result1.png)
 
